@@ -1,10 +1,28 @@
+import { argentBankApi, useLoginMutation } from "@src/services/argentBank";
+import { FormEvent } from "react";
+
 const Login = () => {
+  const [login] = useLoginMutation();
+
+  const test = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const user = await login({
+        email: "tony@stark.com",
+        password: "password123",
+      });
+      console.log(user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
         <i className="fa fa-user-circle sign-in-icon"></i>
         <h1>Sign In</h1>
-        <form>
+        <form onSubmit={(e) => test(e)}>
           <div className="input-wrapper">
             <label htmlFor="username">Username</label>
             <input type="text" id="username" />
@@ -21,9 +39,7 @@ const Login = () => {
           <a href="/user" className="sign-in-button">
             Sign In
           </a>
-          {/* SHOULD BE THE BUTTON BELOW
-        <button className="sign-in-button">Sign In</button>
-      */}
+          <button className="sign-in-button">Sign In Test</button>
         </form>
       </section>
     </main>
