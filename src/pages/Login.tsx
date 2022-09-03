@@ -3,7 +3,6 @@ import { LoginResponse } from "@src/services/argentBank.interface";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import useLocalStorage from "@src/hooks/useLocalStorage";
 import { LocalStorageKeys, StaticRoutes } from "@src/constants/constants";
 import { updateToken } from "@src/store/authReducer";
 import { authStore } from "@src/store";
@@ -18,19 +17,16 @@ const Login = () => {
   const [hasError, setHasError] = useState<boolean>(false);
   const { register, handleSubmit } = useForm<Inputs>({ mode: "onTouched" });
   const [remember, setRemember] = useState<boolean>(false);
-  const { setter: setAuthToken } = useLocalStorage(
-    LocalStorageKeys.AuthToken,
-    ""
-  );
   const navigate = useNavigate();
   const onSubmit = async (data: Inputs) => {
     try {
       const user = (await login(data)) as LoginResponse;
       if (user.error?.status === 400) setHasError(true);
       if (user.data?.status === 200) {
-        remember && setAuthToken(user.data.body.token);
-        navigate(StaticRoutes.Profile);
+        remember && localStorage.setItem(LocalStorageKeys.RememberUser, "true");
+        localStorage.setItem(LocalStorageKeys.AuthToken, user.data.body.token);
         authStore.dispatch(updateToken(user.data.body.token));
+        navigate(StaticRoutes.Profile);
       }
     } catch (err) {
       setHasError(true);

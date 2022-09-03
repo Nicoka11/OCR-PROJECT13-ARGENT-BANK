@@ -1,5 +1,6 @@
 export enum LocalStorageKeys {
   AuthToken = "user-token",
+  RememberUser = "user-remember",
 }
 
 export enum StaticRoutes {

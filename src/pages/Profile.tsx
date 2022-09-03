@@ -1,4 +1,7 @@
+import authRedirection from "@src/utils/authRedirection";
+
 const Profile = () => {
+  authRedirection();
   return (
     <main className="main bg-dark">
       <div className="header">

@@ -1,5 +1,4 @@
 import { LocalStorageKeys, StaticRoutes } from "@src/constants/constants";
-import useLocalStorage from "@src/hooks/useLocalStorage";
 import { authStore } from "@src/store";
 import { resetToken } from "@src/store/authReducer";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,13 +7,10 @@ const NavBar = () => {
   const pathname = useLocation().pathname;
   const navigate = useNavigate();
   const isDisconnected = pathname === "/" || pathname === "/signin";
-  const { setter: setAuthToken } = useLocalStorage(
-    LocalStorageKeys.AuthToken,
-    localStorage.getItem(LocalStorageKeys.AuthToken)
-  );
 
   const onSignOut = () => {
-    setAuthToken(null);
+    localStorage.removeItem(LocalStorageKeys.AuthToken);
+    localStorage.removeItem(LocalStorageKeys.RememberUser);
     navigate(StaticRoutes.Landing);
     authStore.dispatch(resetToken());
   };
