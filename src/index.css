@@ -55,8 +55,16 @@ body {
 }
 
 .main-nav-item {
+  color: #2c3e50;
+  padding: 0;
+  appearance: none;
   text-decoration: none;
   margin-right: 0.5rem;
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
 .main-nav-item i {
@@ -281,6 +289,10 @@ body {
   border-color: #00bc77;
   background-color: #00bc77;
   color: #fff;
+}
+
+.error-message {
+  color: red;
 }
 
 @media (min-width: 720px) {

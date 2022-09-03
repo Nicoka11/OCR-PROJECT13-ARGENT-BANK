@@ -1,8 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "@src/layout/Default";
+// Pages
 import Home from "@src/pages/Home";
 import Login from "@src/pages/Login";
-import Layout from "@src/layout/Default";
-import User from "@src/pages/User";
+import Profile from "@src/pages/Profile";
+
+import { StaticRoutes } from "@src/constants/constants";
 
 function App() {
   return (
@@ -10,8 +13,8 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/user" element={<User />} />
+          <Route path={StaticRoutes.Login} element={<Login />} />
+          <Route path={StaticRoutes.Profile} element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>

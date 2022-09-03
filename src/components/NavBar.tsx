@@ -1,7 +1,23 @@
-import { useLocation } from "react-router-dom";
+import { LocalStorageKeys, StaticRoutes } from "@src/constants/constants";
+import useLocalStorage from "@src/hooks/useLocalStorage";
+import { authStore } from "@src/store";
+import { resetToken } from "@src/store/authReducer";
+import { useLocation, useNavigate } from "react-router-dom";
+
 const NavBar = () => {
   const pathname = useLocation().pathname;
+  const navigate = useNavigate();
   const isDisconnected = pathname === "/" || pathname === "/signin";
+  const { setter: setAuthToken } = useLocalStorage(
+    LocalStorageKeys.AuthToken,
+    localStorage.getItem(LocalStorageKeys.AuthToken)
+  );
+
+  const onSignOut = () => {
+    setAuthToken(null);
+    navigate(StaticRoutes.Landing);
+    authStore.dispatch(resetToken());
+  };
 
   return (
     <nav className="main-nav">
@@ -25,10 +41,10 @@ const NavBar = () => {
               <i className="fa fa-user-circle"></i>
               Tony
             </a>
-            <a className="main-nav-item" href="/">
+            <button className="main-nav-item" onClick={onSignOut}>
               <i className="fa fa-sign-out"></i>
               Sign Out
-            </a>
+            </button>
           </>
         )}
       </div>

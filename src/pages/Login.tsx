@@ -1,6 +1,12 @@
 import { useLoginMutation } from "@src/services/argentBank";
-import { FormEvent, useState } from "react";
+import { LoginResponse } from "@src/services/argentBank.interface";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import useLocalStorage from "@src/hooks/useLocalStorage";
+import { LocalStorageKeys, StaticRoutes } from "@src/constants/constants";
+import { updateToken } from "@src/store/authReducer";
+import { authStore } from "@src/store";
 
 type Inputs = {
   email: string;
@@ -11,10 +17,21 @@ const Login = () => {
   const [login] = useLoginMutation();
   const [hasError, setHasError] = useState<boolean>(false);
   const { register, handleSubmit } = useForm<Inputs>({ mode: "onTouched" });
+  const [remember, setRemember] = useState<boolean>(false);
+  const { setter: setAuthToken } = useLocalStorage(
+    LocalStorageKeys.AuthToken,
+    ""
+  );
+  const navigate = useNavigate();
   const onSubmit = async (data: Inputs) => {
     try {
-      const user = await login(data);
-      console.log(user);
+      const user = (await login(data)) as LoginResponse;
+      if (user.error?.status === 400) setHasError(true);
+      if (user.data?.status === 200) {
+        remember && setAuthToken(user.data.body.token);
+        navigate(StaticRoutes.Profile);
+        authStore.dispatch(updateToken(user.data.body.token));
+      }
     } catch (err) {
       setHasError(true);
     }
@@ -43,11 +60,20 @@ const Login = () => {
             />
           </div>
           <div className="input-remember">
-            <input type="checkbox" id="remember-me" />
+            <input
+              type="checkbox"
+              id="remember-me"
+              onChange={() => setRemember(!remember)}
+            />
             <label htmlFor="remember-me">Remember me</label>
           </div>
           <button className="sign-in-button">Sign In</button>
         </form>
+        {hasError && (
+          <small className="error-message">
+            Email ou/et mot de passe incorrecte
+          </small>
+        )}
       </section>
     </main>
   );

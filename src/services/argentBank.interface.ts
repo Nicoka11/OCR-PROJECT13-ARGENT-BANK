@@ -4,7 +4,29 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
+  data?: {
+    body: {
+      token: string;
+    };
+    message: string;
+    status: number;
+  };
+  error?: {
+    data: {
+      message: string;
+      status: number;
+    };
+    status: number;
+  };
+}
+
+export interface Auth {
   token: string;
+}
+
+export interface UserProfile {
+  firstName: string;
+  lastName: string;
 }
 
 export interface SignUpPayload {

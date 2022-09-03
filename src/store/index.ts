@@ -1,3 +1,5 @@
-import authStore from "./authStore";
+import authProvider, { authStore, RootState, AppDispatch } from "./authStore";
 
-export default authStore;
+export { authStore };
+export type { RootState, AppDispatch };
+export default authProvider;

@@ -1,12 +1,14 @@
-import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { argentBankApi } from "@src/services/argentBank";
 import { ReactNode } from "react";
 import { Provider } from "react-redux";
+import authReducer from "./authReducer";
 
-export const authStore: EnhancedStore = configureStore({
+export const authStore = configureStore({
   reducer: {
     [argentBankApi.reducerPath]: argentBankApi.reducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(argentBankApi.middleware),
