@@ -1,5 +1,5 @@
-import { useLoginMutation } from "@src/services/argentBank";
-import { LoginResponse } from "@src/services/argentBank.interface";
+import { useLoginMutation, useProfileMutation } from "@src/services/argentBank";
+import { LoginResponse, UserProfile } from "@src/services/argentBank.interface";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ type Inputs = {
 
 const Login = () => {
   const [login] = useLoginMutation();
+  const [profileRequest] = useProfileMutation();
   const [hasError, setHasError] = useState<boolean>(false);
   const { register, handleSubmit } = useForm<Inputs>({ mode: "onTouched" });
   const [remember, setRemember] = useState<boolean>(false);
@@ -25,6 +26,11 @@ const Login = () => {
       if (user.data?.status === 200) {
         remember && localStorage.setItem(LocalStorageKeys.RememberUser, "true");
         localStorage.setItem(LocalStorageKeys.AuthToken, user.data.body.token);
+        const profile = (await profileRequest({})) as UserProfile;
+        localStorage.setItem(
+          LocalStorageKeys.UserProfile,
+          JSON.stringify(profile.data?.body)
+        );
         authStore.dispatch(updateToken(user.data.body.token));
         navigate(StaticRoutes.Profile);
       }

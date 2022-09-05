@@ -1,12 +1,24 @@
 import { LocalStorageKeys, StaticRoutes } from "@src/constants/constants";
+import { UserProfileBody } from "@src/services/argentBank.interface";
 import { authStore } from "@src/store";
 import { resetToken } from "@src/store/authReducer";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const pathname = useLocation().pathname;
   const navigate = useNavigate();
-  const isDisconnected = pathname === "/" || pathname === "/signin";
+  const isDisconnected =
+    pathname === StaticRoutes.Landing || pathname === StaticRoutes.Login;
+  const [name, setName] = useState("");
+  useEffect(() => {
+    if (!isDisconnected) {
+      const profile: UserProfileBody = JSON.parse(
+        localStorage.getItem(LocalStorageKeys.UserProfile) as string
+      );
+      setName(profile.firstName);
+    }
+  }, [isDisconnected]);
 
   const onSignOut = () => {
     localStorage.removeItem(LocalStorageKeys.AuthToken);
@@ -35,7 +47,7 @@ const NavBar = () => {
           <>
             <a className="main-nav-item" href="/user">
               <i className="fa fa-user-circle"></i>
-              Tony
+              {name}
             </a>
             <button className="main-nav-item" onClick={onSignOut}>
               <i className="fa fa-sign-out"></i>

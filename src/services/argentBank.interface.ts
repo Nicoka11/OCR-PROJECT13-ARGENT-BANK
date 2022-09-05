@@ -24,9 +24,23 @@ export interface Auth {
   token: string;
 }
 
+export interface UserProfilePayload {}
+
 export interface UserProfile {
+  data?: {
+    body: UserProfileBody;
+    message: string;
+    status: number;
+  };
+}
+
+export interface UserProfileBody {
+  createdAt: string;
+  email: string;
   firstName: string;
+  id: string;
   lastName: string;
+  updatedAt: string;
 }
 
 export interface SignUpPayload {

@@ -1,14 +1,20 @@
+import { LocalStorageKeys } from "@src/constants/constants";
+import { UserProfileBody } from "@src/services/argentBank.interface";
 import authRedirection from "@src/utils/authRedirection";
 
 const Profile = () => {
   authRedirection();
+  const profile: UserProfileBody = JSON.parse(
+    localStorage.getItem(LocalStorageKeys.UserProfile) as string
+  );
+
   return (
     <main className="main bg-dark">
       <div className="header">
         <h1>
           Welcome back
           <br />
-          Tony Jarvis!
+          {profile.firstName} {profile.lastName}!
         </h1>
         <button className="edit-button">Edit Name</button>
       </div>
