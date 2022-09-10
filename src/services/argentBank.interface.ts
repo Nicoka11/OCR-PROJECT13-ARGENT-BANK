@@ -43,6 +43,11 @@ export interface UserProfileBody {
   updatedAt: string;
 }
 
+export interface UpdateProfilePayload {
+  firstName: string;
+  lastName: string;
+}
+
 export interface SignUpPayload {
   email: string;
   password: string;

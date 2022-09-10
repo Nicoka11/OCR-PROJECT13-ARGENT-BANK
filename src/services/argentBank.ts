@@ -1,14 +1,11 @@
-import {
-  createApi,
-  fetchBaseQuery,
-  FetchArgs,
-} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LocalStorageKeys } from "@src/constants/constants";
 import {
   LoginPayload,
   LoginResponse,
   SignUpPayload,
   SignUpResponse,
+  UpdateProfilePayload,
   UserProfile,
   UserProfilePayload,
 } from "./argentBank.interface";
@@ -44,8 +41,15 @@ export const argentBankApi = createApi({
         body: body,
       }),
     }),
+    updateProfile: builder.mutation<UserProfile, UpdateProfilePayload>({
+      query: (body: UpdateProfilePayload) => ({
+        url: "user/profile",
+        method: "PUT",
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useSignUpMutation, useProfileMutation } =
+export const { useLoginMutation, useSignUpMutation, useProfileMutation, useUpdateProfileMutation } =
   argentBankApi;
