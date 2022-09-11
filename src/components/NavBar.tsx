@@ -39,13 +39,13 @@ const NavBar = () => {
       </a>
       <div>
         {isDisconnected ? (
-          <a className="main-nav-item" href="/login">
+          <a className="main-nav-item" href={StaticRoutes.Login}>
             <i className="fa fa-user-circle"></i>
             Sign In
           </a>
         ) : (
           <>
-            <a className="main-nav-item" href="/user">
+            <a className="main-nav-item" href={StaticRoutes.Profile}>
               <i className="fa fa-user-circle"></i>
               {name}
             </a>

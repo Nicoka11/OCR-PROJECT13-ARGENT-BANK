@@ -1,0 +1,264 @@
+openapi: 3.0.1
+info:
+  title: Bank Argent proposed API documentation
+  description: Phase2-Transactions proposed API model
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api/v1
+paths:
+  /user/transactions:
+    get:
+      tags:
+        - Transaction Module
+      summary: Transactions API
+      description: Request for fetching all user's Transactions
+      parameters:
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Transactions retrieved successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransactions"
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+      security:
+        - Bearer: []
+  /user/transactions/{transactionId}:
+    get:
+      tags:
+        - Transaction Module
+      summary: Transactions API
+      description: Request for fetching Transaction's additional informations
+      parameters:
+        - name: transactionId
+          in: path
+          description: UUID of transaction
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Transaction additional informations retrieved successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAdditionalInfos"
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+      security:
+        - Bearer: []
+    put:
+      tags:
+        - Transaction Module
+      summary: Transactions API
+      description: Request for modifying Transaction's additional informations
+      parameters:
+        - name: transactionId
+          in: path
+          description: UUID of transaction
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: addtionnal informations of created transcation
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionAdditionalInfos"
+        required: true
+      responses:
+        200:
+          description: Transaction additional informations modified successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAdditionalInfos"
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+      security:
+        - Bearer: []
+      x-codegen-request-body-name: body
+    post:
+      tags:
+        - Transaction Module
+      summary: Transactions API
+      description: Request for adding Transaction's additional informations
+      parameters:
+        - name: transactionId
+          in: path
+          description: UUID of transaction
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: addtionnal informations of created transcation
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionAdditionalInfos"
+        required: true
+      responses:
+        200:
+          description: Transaction additional informations created successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAdditionalInfos"
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+      security:
+        - Bearer: []
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - Transaction Module
+      summary: Transactions API
+      description: Request for deleting Transaction's additional informations
+      parameters:
+        - name: transactionId
+          in: path
+          description: UUID of transaction
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Transaction additional informations deleted successully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ApiResponse:
+                    $ref: "#/components/schemas/ApiResponse"
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+      security:
+        - Bearer: []
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: transaction universally unique identifier
+        date:
+          type: string
+          description: transaction date
+        description:
+          type: string
+          description: transaction description
+        ammount:
+          type: number
+          description: transaction ammount
+        balance:
+          type: number
+          description: account balance after transaction
+    TransactionAdditionalInfos:
+      type: object
+      properties:
+        transactionType:
+          type: string
+          description: transaction type
+          enum:
+            - Electronic
+            - Card
+            - Withdrowing
+            - Other
+        category:
+          type: string
+          description: transaction category
+          enum:
+            - Food
+            - Health
+            - Hobbies
+            - Shopping
+            - Other
+        Notes:
+          type: string
+          description: transaction notes
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+    ApiResponseTransactions:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+    ApiResponseAdditionalInfos:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          $ref: "#/components/schemas/TransactionAdditionalInfos"
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
